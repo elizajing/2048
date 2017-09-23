@@ -1,0 +1,72 @@
+table {
+    text-align: center;
+    margin: auto;
+    width: auto;
+    border-radius: 5px;
+    background-color: #73AD21;
+}
+td{
+  border-radius: 5px;
+  padding: 50px;
+  background-color: #f2f2f2;
+  color: #5d8e18;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+}
+/*button{
+  background-color: #73AD21;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-decoration: none;
+  font-size: 16px;
+}*/
+.sbutton{
+  position: relative;
+	display: inline-block;
+	margin: 1em;
+	padding: 0;
+	border: none;
+	background: none;
+	color: #286aab;
+	font-size: 1.4em;
+	transition: color 0.7s;
+}
+.sbutton.sbutton--click,
+.sbutton:focus{
+  outline: none;
+	color: #3c8ddc;
+}
+.sbutton::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -35px 0 0 -35px;
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	opacity: 0;
+	pointer-events: none;
+}
+.sbutton--effect::after {
+	background: rgba(111,148,182,0.1);
+}
+
+.sbutton--effect.sbutton--click::after {
+	animation: anim-effect 0.3s forwards;
+}
+
+@keyframes anim-effect {
+	0% {
+		transform: scale3d(0.3, 0.3, 1);
+	}
+	25%, 50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		transform: scale3d(1.2, 1.2, 1);
+	}
+}

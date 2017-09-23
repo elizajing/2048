@@ -1,0 +1,19 @@
+{
+  "name": "2048",
+  "version": "1.0.0",
+  "description": "A board game",
+  "main": "index.html",
+  "scripts": {
+    "start": "npm run lite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elizajing/2048.git"
+  },
+  "author": "Eliza Jing",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elizajing/2048/issues"
+  },
+  "homepage": "https://github.com/elizajing/2048#readme"
+}
