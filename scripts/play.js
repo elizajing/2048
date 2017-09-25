@@ -15,7 +15,7 @@ var app = angular.module('game', []);
 - No animation for when two slots merge
 - No support for rule:
 */
-app.controller('playController', ($scope) => {
+app.controller('playController', ($scope, $window) => {
     $scope.moved = false;
     $scope.board = [
       [2,'',4,2],
@@ -23,6 +23,7 @@ app.controller('playController', ($scope) => {
       ['','','',''],
       ['','',4,'']
       ];
+    $scope.score = 0;
 
     $scope.keyPress = function($event){
         console.log($event.keyCode);
@@ -33,10 +34,13 @@ app.controller('playController', ($scope) => {
           randomize_slot($scope.board);
         }else if(key == 39){//right
           $scope.board = moveRight($scope.board);
+          randomize_slot($scope.board);
         }else if(key == 37){//left
           $scope.board = moveLeft($scope.board);
+          randomize_slot($scope.board);
         }else if(key == 40){//down
           $scope.board = moveDown($scope.board);
+          randomize_slot($scope.board);
         }
       }
 
@@ -63,6 +67,10 @@ app.controller('playController', ($scope) => {
                       var sum = parseInt(board[r-1][col] + board[r][col]);
                       board[r-1][col] = sum;
                       board[r][col] = '';
+                      $scope.score += sum;
+                      if(sum == 2048){
+                        $window.alert("You've won!");
+                      }
                       empty_rows.push(r);
                       }
                   }
@@ -72,6 +80,10 @@ app.controller('playController', ($scope) => {
                     var sum = parseInt(board[row-1][col] + board[row][col]);
                     board[row-1][col] = sum;
                     board[row][col] = '';
+                    $scope.score += sum;
+                    if(sum == 2048){
+                      $window.alert("You've won!");
+                    }
                     empty_rows.push(row);
 
                   }
@@ -105,6 +117,10 @@ app.controller('playController', ($scope) => {
                       var sum = parseInt(board[r+1][col]+board[r][col]);
                       board[r+1][col] = sum;
                       board[r][col] = '';
+                      $scope.score += sum;
+                      if(sum == 2048){
+                        $window.alert("You've won!");
+                      }
                       empty_rows.push(r);
                     }
                   }
@@ -114,6 +130,10 @@ app.controller('playController', ($scope) => {
                     var sum = parseInt(board[row+1][col]+board[row][col]);
                     board[row+1][col] = sum;
                     board[row][col] = '';
+                    $scope.score += sum;
+                    if(sum == 2048){
+                      $window.alert("You've won!");
+                    }
                     empty_rows.push(row);
                   }
                 }
@@ -145,6 +165,10 @@ app.controller('playController', ($scope) => {
                       var sum = parseInt(board[row][c-1] + board[row][c]);
                       board[row][c-1] = sum;
                       board[row][c] ='';
+                      $scope.score += sum;
+                      if(sum == 2048){
+                        $window.alert("You've won!");
+                      }
                       empty_cols.push(c);
                     }
                   }
@@ -153,6 +177,10 @@ app.controller('playController', ($scope) => {
                     var sum = parseInt(board[row][col-1] + board[row][col]);
                     board[row][col-1] = sum;
                     board[row][col] = '';
+                    $scope.score += sum;
+                    if(sum == 2048){
+                      $window.alert("You've won!");
+                    }
                     empty_cols.push(col);
                   }
 
@@ -185,6 +213,10 @@ app.controller('playController', ($scope) => {
                       var sum = parseInt(board[row][c] + board[row][c+1]);
                       board[row][c+1] = sum;
                       board[row][c] = '';
+                      $scope.score += sum;
+                      if(sum == 2048){
+                        $window.alert("You've won!");
+                      }
                       empty_cols.push(c);
                     }
                   }
@@ -194,6 +226,10 @@ app.controller('playController', ($scope) => {
                     var sum = parseInt(board[row][col+1]+board[row][col]);
                     board[row][col+1] = sum;
                     board[row][col] = '';
+                    $scope.score += sum;
+                    if(sum == 2048){
+                      $window.alert("You've won!");
+                    }
                     empty_cols.push(col);
                   }
                 }
@@ -228,10 +264,8 @@ app.controller('playController', ($scope) => {
               }
           }
         }
-      }else{
-        //check board for 2048, lost game otherwise
-
       }
+
 
       function isBoardFull(board){
         var size = board[0].length;

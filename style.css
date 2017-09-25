@@ -1,3 +1,27 @@
+.container{
+  margin: 0 auto;
+  width: 500px;
+}
+.scores{
+  border-radius: 5px;
+  background-color: #73AD21;
+  color: #FFFFFF;
+  font-family: verdana;
+  width: 100px;
+  height: 50px;
+  margin-left: 400px;
+  text-align: center;
+  padding-top: 17px;
+  /*padding-bottom: 2px;*/
+}
+.title{
+  font-family: verdana;
+  font-style: bold;
+  color: #73AD21;
+  font-size: 80px;
+  /*margin: 0;*/
+  float: left;
+}
 table {
     text-align: center;
     font-family: verdana;
@@ -17,6 +41,7 @@ td{
   height: 40px;
 }
 .button {
+  border-radius: 5px;
   position: relative;
   background-color: #73AD21;
   border: none;
