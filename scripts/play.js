@@ -1,3 +1,6 @@
+'use strict';
+
+var app = angular.module('game', []);
 /*
 1. Create a simple 4x4 grid that is randomly populated with two tiles
 2. Move the tiles when user presses arrow keys
@@ -7,25 +10,19 @@
 6. Display a message when the game is ‘won’ or when no more moves can be made
 7. Add transitions when tiles are moved and merged
 */
-'use strict';
-
-var app = angular.module('game', [
-
-]);
-
+/*known limitations:
+- No dynamic css, slots doesn't change color
+- No animation for when two slots merge
+- No support for rule:
+*/
 app.controller('playController', ($scope) => {
     $scope.moved = false;
     $scope.board = [
+      [2,'',4,2],
       ['','','',''],
       ['','','',''],
-      ['',2,'',''],
       ['','',4,'']
       ];
-    // $scope.keyUp = false;
-    // $scope.keyDown = false;
-    // $scope.keyLeft = false;
-    // $scope.keyRight = false;
-
 
     $scope.keyPress = function($event){
         console.log($event.keyCode);
@@ -33,6 +30,7 @@ app.controller('playController', ($scope) => {
         var key = $event.keyCode;
         if(key == 38){//up
           $scope.board = moveUp($scope.board);
+          randomize_slot($scope.board);
         }else if(key == 39){//right
           $scope.board = moveRight($scope.board);
         }else if(key == 37){//left
@@ -45,32 +43,82 @@ app.controller('playController', ($scope) => {
 
       function moveUp(board){
         var size = board[1].length;
-        for(var i = 1; i<size; i++){
-          for(var j = 0; j<size; j++){
-            if(board[0][j] == ''){
-              board[0][j] = board[i][j];
-            }else{//if first row is not empty
-              var sum = parseInt(board[0][j] + board[i][j]);
-              board[0][j] = sum;
-            }
-            board[i][j] = '';
+        for(var col = 0; col<size; col++){
+          var empty_rows= [];
+          for(var row = 0; row<size; row++){
+            if(board[row][col] == ''){
+              empty_rows.push(row);
+            }else{//if this is not an empty slot
+              if(row != 0) {//if this is not the first row
+                //pop the first availabe slot in the empty_slots array
+                if(empty_rows.length != 0){
+                  var r = empty_rows[0];
+                  board[r][col] = board[row][col];
+                  board[row][col] = '';
+                  empty_rows.shift();
+                  empty_rows.push(row);
+                  if(r != 0){
+                    //check if the upper slot to [r, c] is of the same value
+                    if(board[r-1][col] == board[r][col]){
+                      var sum = parseInt(board[r-1][col] + board[r][col]);
+                      board[r-1][col] = sum;
+                      board[r][col] = '';
+                      empty_rows.push(r);
+                      }
+                  }
+
+                }else{//if there're not available slots, just check above slot value
+                  if(board[row-1][col] == board[row][col]){
+                    var sum = parseInt(board[row-1][col] + board[row][col]);
+                    board[row-1][col] = sum;
+                    board[row][col] = '';
+                    empty_rows.push(row);
+
+                  }
+                }
+              }
           }
         }
+      }
+
         return board;
       }
 
       function moveDown(board){
         var size = board[1].length;
-        for(var i = 0; i<size; i++){
-          for(var j = 0; j<size; j++){
-            if(i < size-1){//check if not the last row
-              if(board[size-1][j] == ''){
-                board[size-1][j] = board[i][j];
-              }else{//if the last row is not empty
-                var sum = parseInt(board[size-1][j] + board[i][j]);
-                board[size-1][j] = sum;
+        for(var col = 0; col<size; col++){
+          var empty_rows = [];
+          for(var row = size-1; row>=0; row--){
+            if(board[row][col] == ''){
+              empty_rows.push(row);
+            }else{
+              if(row != size-1){//check if not the last row
+                if(empty_rows.length != 0){
+
+                  var r = empty_rows[0];
+                  board[r][col] = board[row][col];
+                  board[row][col] = '';
+                  empty_rows.shift();
+                  empty_rows.push(row);
+                  if(r != 3){//check that r is not the last row
+                    if(board[r+1][col] == board[r][col]) {
+                      var sum = parseInt(board[r+1][col]+board[r][col]);
+                      board[r+1][col] = sum;
+                      board[r][col] = '';
+                      empty_rows.push(r);
+                    }
+                  }
+
+                }else{//if there're no empty slots
+                  if(board[row+1][col] == board[row][col]){
+                    var sum = parseInt(board[row+1][col]+board[row][col]);
+                    board[row+1][col] = sum;
+                    board[row][col] = '';
+                    empty_rows.push(row);
+                  }
+                }
+
               }
-              board[i][j] = '';
             }
           }
         }
@@ -79,15 +127,39 @@ app.controller('playController', ($scope) => {
 
       function moveLeft(board){
         var size = board[1].length;
-        for(var i = 0; i<size; i++){
-          for(var j = 1; j<size; j++){
-            if(board[i][0] == ''){
-              board[i][0] = board[i][j];
-            }else{//if first column is not empty
-              var sum = parseInt(board[i][0] + board[i][j]);
-              board[i][0] = sum;
+        for(var row = 0; row<size; row++){
+          var empty_cols = [];
+          for(var col = 0; col<size; col++){
+            if(board[row][col] == ''){
+              empty_cols.push(col);
+            }else{
+              if(col != 0){
+                if(empty_cols.length != 0){
+                  var c = empty_cols[0];
+                  board[row][c] = board[row][col];
+                  board[row][col] = '';
+                  empty_cols.shift();
+                  empty_cols.push(col);
+                  if(c != 0){
+                    if(board[row][c-1] == board[row][col]){
+                      var sum = parseInt(board[row][c-1] + board[row][c]);
+                      board[row][c-1] = sum;
+                      board[row][c] ='';
+                      empty_cols.push(c);
+                    }
+                  }
+                }else{
+                  if(board[row][col-1] == board[row][col]){//check previous column
+                    var sum = parseInt(board[row][col-1] + board[row][col]);
+                    board[row][col-1] = sum;
+                    board[row][col] = '';
+                    empty_cols.push(col);
+                  }
+
+                }
+              }
+
             }
-            board[i][j] = '';
           }
         }
         return board;
@@ -95,20 +167,82 @@ app.controller('playController', ($scope) => {
 
       function moveRight(board){
         var size = board[1].length;
-        for(var i = 0; i<size; i++){
-          for(var j = 0; j<size; j++){
-            if(j < size-1){//check if not the last column
-              if(board[i][size-1] == ''){
-                board[i][size-1] = board[i][j];
-              }else{
-                var sum = parseInt(board[i][size-1] + board[i][j]);
-                board[i][size-1] = sum;
+        for(var row = 0; row<size; row++){
+          var empty_cols = [];
+          for(var col = size-1; col>=0; col--){
+            if(board[row][col] == ''){
+              empty_cols.push(col);
+            }else{
+              if(col != size-1){
+                if(empty_cols.length != 0){
+                  var c = empty_cols[0];
+                  board[row][c] = board[row][col];
+                  board[row][col] = '';
+                  empty_cols.shift();
+                  empty_cols.push(col);
+                  if(c != 0){
+                    if(board[row][c] == board[row][c+1]){
+                      var sum = parseInt(board[row][c] + board[row][c+1]);
+                      board[row][c+1] = sum;
+                      board[row][c] = '';
+                      empty_cols.push(c);
+                    }
+                  }
+
+                }else{
+                  if(board[row][col+1] == board[row][col]){
+                    var sum = parseInt(board[row][col+1]+board[row][col]);
+                    board[row][col+1] = sum;
+                    board[row][col] = '';
+                    empty_cols.push(col);
+                  }
+                }
               }
-              board[i][j] = '';
             }
           }
         }
         return board;
+      }
+
+      function randomize_slot(board){
+        //generate random 2 or 4 slot
+        if(isBoardFull(board) == false){
+          var range = 6;
+          var num = Math.floor( Math.random() * range / 2 ) * 2;//0 is included in here
+          while(num == 0){
+            num = Math.floor( Math.random() * range / 2 ) * 2;//0 is included in here
+          }
+          //generate random slot (0-3)
+          var r = Math.floor(Math.random() * 4) + 0;
+          var c = Math.floor(Math.random() * 4) + 0;
+
+
+          while(true){
+            if(board[r][c] == ''){
+              board[r][c] = num;
+              break;
+            }else{//if the [r,c] slot is not empty and num is zero, keep generate random slot
+              r = Math.floor(Math.random() * 4) + 0;
+              c = Math.floor(Math.random() * 4) + 0;
+              //console.log('--'+r+'--'+c);
+              }
+          }
+        }
+      }else{
+        //check board for 2048, lost game otherwise
+
+      }
+
+      function isBoardFull(board){
+        var size = board[0].length;
+        for(var i = 0; i<size; i++){
+          for(var j = 0; j<size; j++){
+            if(board[i][j] == ''){
+              return false;
+            }
+          }
+        }
+        return true;
       }
 
 })
