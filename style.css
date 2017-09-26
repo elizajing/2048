@@ -1,49 +1,56 @@
 .container{
   margin: 0 auto;
-  width: 500px;
+  width: 600px;
 }
 .scores{
   border-radius: 5px;
-  background-color: #73AD21;
+  background-color: #898c85;
   color: #FFFFFF;
   font-family: verdana;
   width: 100px;
   height: 50px;
-  margin-left: 400px;
+  /*margin-left: 400px;*/
+  margin-top: 15px;
   text-align: center;
   padding-top: 17px;
   /*padding-bottom: 2px;*/
+  float: right;
 }
 .title{
+  float: left;
   font-family: verdana;
   font-style: bold;
-  color: #73AD21;
+  color: #898c85;
   font-size: 80px;
   /*margin: 0;*/
   float: left;
 }
 table {
+    border: 5px solid;
     text-align: center;
     font-family: verdana;
     font-style: bold;
-    margin: auto;
-    width: auto;
-    border-radius: 5px;
+    width: 210px;
+    height: 210px;
+    border-radius: 10px;
     background-color: #73AD21;
+    color: #73AD21;
+    table-layout: fixed;
+    font-size: 30px;
 }
 td{
-  border-radius: 5px;
+  border: 5px solid;
+  border-radius: 10px;
   padding: 50px;
   background-color: #f2f2f2;
-  color: #5d8e18;
-  font-size: 20px;
+  color: #73AD21;
   width: 40px;
   height: 40px;
 }
 .button {
   border-radius: 5px;
   position: relative;
-  background-color: #73AD21;
+  background-color: #898c85;
   border: none;
   font-size: 28px;
   color: #FFFFFF;
@@ -57,16 +64,6 @@ td{
   cursor: pointer;
   font-size: 18px;
 }
-/*
-.button{
-  background-color: #73AD21;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-decoration: none;
-  font-size: 16px;
-}*/
-
 .button:after {
     content: "";
     background: #90EE90;

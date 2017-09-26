@@ -16,13 +16,19 @@ var app = angular.module('game', []);
 - No support for rule:
 */
 app.controller('playController', ($scope, $window) => {
-    $scope.moved = false;
-    $scope.board = [
+    var board = initBoard();
+
+    $scope.board = board;
+    /*[
       [2,'',4,2],
       ['','','',''],
       ['','','',''],
       ['','',4,'']
-      ];
+    ];*/
+    $scope.newBoard = function(){
+      var newBoard = initBoard();
+      $scope.board = initBoard();
+    }
     $scope.score = 0;
 
     $scope.keyPress = function($event){
@@ -44,6 +50,18 @@ app.controller('playController', ($scope, $window) => {
         }
       }
 
+      function initBoard(){
+        var board = [
+          ['','','',''],
+          ['','','',''],
+          ['','','',''],
+          ['','','','']
+        ];
+        randomize_slot(board);
+        randomize_slot(board);
+
+        return board;
+      }
 
       function moveUp(board){
         var size = board[1].length;
@@ -263,6 +281,8 @@ app.controller('playController', ($scope, $window) => {
               //console.log('--'+r+'--'+c);
               }
           }
+        }else{
+          $window.alert("You've lost!");
         }
       }
 
