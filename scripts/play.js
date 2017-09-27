@@ -15,7 +15,7 @@ var app = angular.module('game', []);
 - No animation for when two slots merge
 - No support for rule:
 */
-app.controller('playController', ($scope, $window) => {
+app.controller('playController', function($scope, $window){
     var board = initBoard();
 
     $scope.board = board;
